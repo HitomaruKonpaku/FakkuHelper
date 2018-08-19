@@ -1,0 +1,33 @@
+{
+    "manifest_version": 2,
+    "version": "1.0.0",
+    "name": "Fakku Helper",
+    "description": "",
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.fakku.net/",
+                "*://*.fakku.net/page/*"
+            ],
+            "css": [
+                "css/main.css"
+            ],
+            "js": [
+                "cdn/js/jquery.min.js",
+                "cdn/js/vue.min.js",
+                "cdn/js/download.min.js",
+                "js/main.js"
+            ]
+        }
+    ],
+    "permissions": [
+        "declarativeContent",
+        "activeTab",
+        "tabs",
+        "*://*.fakku.net/",
+        "*://*.fakku.net/page/*"
+    ],
+    "web_accessible_resources": [
+        "html/*"
+    ]
+}
