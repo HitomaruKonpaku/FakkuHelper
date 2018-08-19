@@ -23,6 +23,7 @@
         ],
         "no-console": "off",
         "no-trailing-spaces": "error",
+        "no-undef": "warn",
         "no-unused-vars": "warn",
         "quotes": [
             "error",
