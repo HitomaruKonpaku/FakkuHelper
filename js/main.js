@@ -1,3 +1,27 @@
+/**
+ * GLOBAL CONFIG
+ */
+const CONFIG = {
+    comicTagExclude: [
+        'illustration',
+    ],
+    tagExclude: [
+        'uncensored',
+        'doujinshi',
+        'subscription',
+        'hentai',
+        'creampie',
+        'doujinshi',
+    ],
+    tagReplace: {
+        'oppai': 'big breast',
+        'blowjob': 'fellatio',
+    },
+}
+
+/**
+ * CREATE VUE APP
+ */
 $(document).ready(() => {
     console.log('Fakku Helper ready!')
 
@@ -12,7 +36,7 @@ $(document).ready(() => {
     // console.log(sourcePanel)
     sourcePanel.prepend(html).ready(() => {
         $.each($('.content-comic .content-meta'), (i, v) => {
-            var btn = $('<div>')
+            const btn = $('<div>')
                 .addClass('row')
                 .attr('id', `comic-${i}`)
                 .html(`<input type="button" value="Copy Tags" @click="copyTags(${i})">`)
@@ -23,19 +47,12 @@ $(document).ready(() => {
             // el: `#${appId}`,
             el: '.wrap',
             data: {
-                comicList: [],
-                tagExclude: [
-                    'uncensored',
-                    'doujinshi',
-                    'subscription',
-                    'hentai',
-                    'creampie',
-                    'doujinshi',
+                comicList: [
+                    // { title, artist, tags },
                 ],
-                tagReplace: {
-                    'oppai': 'big breast',
-                    'blowjob': 'fellatio',
-                },
+                comicTagExclude: CONFIG.comicTagExclude,
+                tagExclude: CONFIG.tagExclude,
+                tagReplace: CONFIG.tagReplace,
             },
             methods: {
                 notImplemented: () => {
@@ -43,17 +60,19 @@ $(document).ready(() => {
                     alert(msg)
                 },
                 copyNameAuthor: () => {
-                    var list = [...app.comicList].reverse().map(v => `[${v.artist}] ${v.title}`)
+                    const list = [...app.comicList].reverse()
+                        .filter(v => !app.comicTagExclude.some(u => v.tags.includes(u)))
+                        .map(v => `[${v.artist}] ${v.title}`)
                     // console.log(list)
-                    var msg = list.join('\n')
+                    const msg = list.join('\n')
                     console.log(msg)
                     download(msg, `Fakku-${Date.now()}.txt`, 'text/plain')
                 },
                 copyTags: (i) => {
-                    var tags = app.comicList[i].tags
+                    const tags = app.comicList[i].tags
                         .filter(v => !app.tagExclude.includes(v))
                         .map(v => app.tagReplace[v] || v)
-                    var content = tags.join(',')
+                    const content = tags.join(',')
                     app.copyToClipboard(content)
                 },
                 copyToClipboard: (content) => {
@@ -66,13 +85,13 @@ $(document).ready(() => {
                 },
             },
             mounted: function () {
-                var list = this.comicList
+                const list = this.comicList
                 $.each($('.content-comic .content-meta'), (i, v) => {
-                    var title = $('a[class=content-title]', v).text()
+                    const title = $('a[class=content-title]', v).text()
                     // console.log(title)
-                    var artist = $('.row:nth-child(2) .row-right a', v).text()
+                    const artist = $('.row:nth-child(2) .row-right a', v).text()
                     // console.log(artist)
-                    var tags = $('.tags a', v).toArray().map(v => v.text)
+                    const tags = $('.tags a', v).toArray().map(v => v.text)
                     // console.log(tags)
                     list.push({ title, artist, tags })
                 })
