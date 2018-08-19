@@ -23,7 +23,6 @@
         ],
         "no-console": "off",
         "no-trailing-spaces": "error",
-        "no-undef": "warn",
         "no-unused-vars": "warn",
         "quotes": [
             "error",
@@ -33,5 +32,12 @@
             "error",
             "never"
         ]
+    },
+    "globals": {
+        "console": true,
+        "alert": true,
+        "document": true,
+        "Vue": true,
+        "download": true
     }
 }
