@@ -3,6 +3,28 @@
     "version": "1.0.0",
     "name": "Fakku Helper",
     "description": "",
+    "icons": {
+        "16": "ico/300.png",
+        "32": "ico/300.png",
+        "48": "ico/300.png",
+        "64": "ico/300.png",
+        "128": "ico/300.png"
+    },
+    "page_action": {
+        "default_icon": {
+            "16": "ico/300.png",
+            "32": "ico/300.png",
+            "48": "ico/300.png",
+            "64": "ico/300.png",
+            "128": "ico/300.png"
+        }
+    },
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ],
+        "persistent": false
+    },
     "content_scripts": [
         {
             "matches": [
