@@ -96,11 +96,10 @@ $(document).ready(() => {
             },
             mounted: function () {
                 const list = this.comicList
-                $.each($('.content-comic .content-meta'), (_, v) => {
+                $.each($('.content-comic .content-meta'), (i, v) => {
+                    // console.log(`----------${i}----------`)
                     // console.log(v)
-                    const metaList = $('.row .row-left', v)
-                        .map(function () { return $(this).text().trim().toLowerCase() })
-                        .toArray()
+                    const metaList = $('.row .row-left', v).toArray().map(v => v.textContent.trim().toLowerCase())
                     // console.log(metaList)
                     if (!!this.ignoreBook && metaList.includes('book')) {
                         return
