@@ -4,6 +4,10 @@
 const CONFIG = {
     comicTagExclude: [
         'illustration',
+        'doujin',
+        'non-h',
+        'ecchi',
+        'book',
     ],
     tagExclude: [
         'uncensored',
@@ -16,7 +20,12 @@ const CONFIG = {
     tagReplace: {
         'oppai': 'big breast',
         'blowjob': 'fellatio',
+        'forced': 'rape',
+        'schoolgirl outfit': 'Schoolgirl',
+        'booty': 'Big ass',
+        'toys': 'Sex Toys',
     },
+    ignoreBook: true,
 }
 
 /**
@@ -53,6 +62,7 @@ $(document).ready(() => {
                 comicTagExclude: CONFIG.comicTagExclude,
                 tagExclude: CONFIG.tagExclude,
                 tagReplace: CONFIG.tagReplace,
+                ignoreBook: CONFIG.ignoreBook,
             },
             methods: {
                 notImplemented: () => {
@@ -86,12 +96,20 @@ $(document).ready(() => {
             },
             mounted: function () {
                 const list = this.comicList
-                $.each($('.content-comic .content-meta'), (i, v) => {
-                    const title = $('a[class=content-title]', v).text()
+                $.each($('.content-comic .content-meta'), (_, v) => {
+                    // console.log(v)
+                    const metaList = $('.row .row-left', v)
+                        .map(function () { return $(this).text().trim().toLowerCase() })
+                        .toArray()
+                    // console.log(metaList)
+                    if (!!this.ignoreBook && metaList.includes('book')) {
+                        return
+                    }
+                    const title = $('a[class=content-title]', v).text().trim()
                     // console.log(title)
-                    const artist = $('.row:nth-child(2) .row-right a', v).text()
+                    const artist = $('.row:nth-child(2) .row-right a', v).text().trim()
                     // console.log(artist)
-                    const tags = $('.tags a', v).toArray().map(v => v.text)
+                    const tags = $('.tags a', v).toArray().map(v => v.text.trim())
                     // console.log(tags)
                     list.push({ title, artist, tags })
                 })
