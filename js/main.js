@@ -57,7 +57,7 @@ $(document).ready(() => {
             el: '.wrap',
             data: {
                 comicList: [
-                    // { title, artist, tags },
+                    // { title, artist, tags, isBook },
                 ],
                 comicTagExclude: CONFIG.comicTagExclude,
                 tagExclude: CONFIG.tagExclude,
@@ -72,6 +72,7 @@ $(document).ready(() => {
                 copyNameAuthor: () => {
                     const list = [...app.comicList].reverse()
                         .filter(v => !app.comicTagExclude.some(u => v.tags.includes(u)))
+                        .filter(v => !app.ignoreBook || !v.isBook)
                         .map(v => `[${v.artist}] ${v.title}`)
                     // console.log(list)
                     const msg = list.join('\n')
@@ -99,18 +100,16 @@ $(document).ready(() => {
                 $.each($('.content-comic .content-meta'), (i, v) => {
                     // console.log(`----------${i}----------`)
                     // console.log(v)
-                    const metaList = $('.row .row-left', v).toArray().map(v => v.textContent.trim().toLowerCase())
-                    // console.log(metaList)
-                    if (!!this.ignoreBook && metaList.includes('book')) {
-                        return
-                    }
                     const title = $('a[class=content-title]', v).text().trim()
                     // console.log(title)
                     const artist = $('.row:nth-child(2) .row-right a', v).text().trim()
                     // console.log(artist)
                     const tags = $('.tags a', v).toArray().map(v => v.text.trim())
                     // console.log(tags)
-                    list.push({ title, artist, tags })
+                    const metaList = $('.row .row-left', v).toArray().map(v => v.textContent.trim().toLowerCase())
+                    // console.log(metaList)
+                    const isBook = metaList.includes('book')
+                    list.push({ title, artist, tags, isBook })
                 })
             },
         })
