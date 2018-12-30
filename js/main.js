@@ -97,7 +97,8 @@ $(document).ready(() => {
             },
             mounted: function () {
                 const list = this.comicList
-                $.each($('.content-comic .content-meta'), (i, v) => {
+                const selector = '.front-page > div > div:nth-child(2) > .content-comic .content-meta'
+                $.each($(selector), (i, v) => {
                     // console.log(`----------${i}----------`)
                     // console.log(v)
                     const title = $('a[class=content-title]', v).text().trim()
