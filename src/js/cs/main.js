@@ -77,7 +77,11 @@
           const list = [...this.comicList].reverse()
             .filter(v => !this.comicTagExclude.some(u => v.tags.includes(u)))
             .filter(v => !this.ignoreBook || !v.isBook)
-            .map(v => `[${v.artist}] ${v.title}${includesTags ? ` | ${this.generateTags(v.tags)}` : ''}`)
+            .map(v => [
+              '[' + v.artist + ']',
+              v.title,
+              !includesTags ? '' : '| ' + this.generateTags(v.tags)
+            ].join(' ').trim())
           const content = list.join('\n')
           console.log(content)
           return content
