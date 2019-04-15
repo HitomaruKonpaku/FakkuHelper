@@ -1,0 +1,35 @@
+.fakku-helper-nav,
+.fakku-helper-nav *,
+.fakku-helper-copy-tag * {
+  transition-duration: 0.2s;
+}
+
+.fakku-helper-nav {
+  display: flex;
+  width: 100%;
+  height: 1.5rem;
+  margin: -0.8rem 0 1.2rem 0;
+  line-height: 2rem;
+  position: sticky;
+  top: 50px;
+  z-index: 99;
+}
+
+.fakku-helper-nav input[type=button],
+.fakku-helper-copy-tag input[type=button] {
+  background: #0a9d54;
+  color: #FFF;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+.fakku-helper-nav input[type=button]:hover,
+.fakku-helper-copy-tag input[type=button]:hover {
+  opacity: 1;
+}
+
+.fakku-helper-nav input[type=button]:active,
+.fakku-helper-copy-tag input[type=button]:active {
+  background: #9d0a0a
+}
