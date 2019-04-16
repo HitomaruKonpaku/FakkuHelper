@@ -38,8 +38,7 @@
       data: {
         comicList: [
           // { title, artist, tags, isBook },
-        ],
-        ...window.FakkuHelper.config
+        ]
       },
       computed: {},
       mounted() {
@@ -62,6 +61,9 @@
         })
       },
       methods: {
+        getConfig() {
+          return window.FakkuHelper.config
+        },
         copyToClipboard(content) {
           const el = document.createElement('textarea')
           el.value = content
@@ -74,9 +76,11 @@
           download(content, `Fakku-${Date.now()}.txt`, 'text/plain')
         },
         generateNameAuthorTags({ includesTags }) {
-          const list = [...this.comicList].reverse()
-            .filter(v => !this.comicTagExclude.some(u => v.tags.includes(u)))
-            .filter(v => !this.ignoreBook || !v.isBook)
+          const config = this.getConfig()
+          const list = [...this.comicList]
+            .reverse()
+            .filter(v => !config.comicTagExclude.some(u => v.tags.includes(u)))
+            .filter(v => !config.ignoreBook || !v.isBook)
             .map(v => [
               '[' + v.artist + ']',
               v.title,
@@ -93,16 +97,17 @@
           this.downloadContent(this.generateNameAuthorTags({ includesTags: true }))
         },
         generateTags(tags) {
+          const config = this.getConfig()
           const filterTags = tags
-            .filter(v => !this.tagExclude.includes(v))
-            .map(v => this.tagReplace[v] || v)
+            .filter(v => !config.tagExclude.includes(v))
+            .map(v => config.tagReplace[v] || v)
           console.log({ tags, filterTags })
           const content = filterTags.join(',')
+          // console.log(content)
           return content
         },
         copyTags(index) {
-          const content = this.generateTags(this.comicList[index].tags)
-          this.copyToClipboard(content)
+          this.copyToClipboard(this.generateTags(this.comicList[index].tags))
         }
       }
     })
