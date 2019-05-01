@@ -1,7 +1,13 @@
-(function () {
-  'use strict'
+(function (global, factory) {
+  if (typeof global.FakkuHelper !== 'object') {
+    throw new Error('FakkuHelper object not found!')
+  }
+  factory(global)
+})(this, function (global) {
 
-  window.FakkuHelper.config = {
+  console.log('FakkuHelper config loaded!')
+
+  global.FakkuHelper.config = {
     comicTagExclude: [
       'illustration',
       'doujin',
@@ -28,4 +34,4 @@
     ignoreBook: true
   }
 
-})()
+})

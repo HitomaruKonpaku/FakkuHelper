@@ -1,12 +1,16 @@
-(function () {
-  'use strict'
+(function (global, factory) {
+  if (typeof global.FakkuHelper !== 'object') {
+    throw new Error('FakkuHelper object not found!')
+  }
+  factory(global)
+})(this, function (global) {
 
-  $(document).ready(() => {
-    console.log('Fakku Helper ready!')
-    runOnReady()
-  })
+  console.log('FakkuHelper main loaded!')
 
-  function runOnReady() {
+  $(document).ready(onceReady)
+
+  function onceReady() {
+    console.log('FakkuHelper ready!')
     loadUI()
   }
 
@@ -33,36 +37,47 @@
   }
 
   function loadApp() {
-    window.FakkuHelper.app = new Vue({
+    global.FakkuHelper.app = new Vue({
       el: '.wrap',
       data: {
-        comicList: [
-          // { title, artist, tags, isBook },
-        ]
+        comicList: []
       },
       computed: {},
       mounted() {
+        // Debug mode
+        const debug = global.FakkuHelper.debug
         // Load comic list
-        const list = this.comicList
-        const selector = '.front-page > div > div:nth-child(2) > .content-comic .content-meta'
-        $.each($(selector), (i, v) => {
-          // console.log(`----------${i}----------`)
-          // console.log(v)
-          const title = $('a[class=content-title]', v).text().trim()
-          // console.log(title)
-          const artist = $('.row:nth-child(2) .row-right a', v).text().trim()
-          // console.log(artist)
-          const tags = $('.tags a', v).toArray().map(v => v.text.trim())
-          // console.log(tags)
-          const metaList = $('.row .row-left', v).toArray().map(v => v.textContent.trim().toLowerCase())
-          // console.log(metaList)
-          const isBook = metaList.includes('book')
-          list.push({ title, artist, tags, isBook })
+        const comicList = this.comicList
+        const comicContainer = '.tab-content.active .content-row.content-comic'
+        $(comicContainer).each((i, comicContent) => {
+          const comicObject = {}
+          if (debug) console.log(`----------${i}----------`)
+          if (debug) console.log(comicContent)
+          const comicContentMeta = $('.content-meta', comicContent)[0]
+          if (debug) console.log(comicContentMeta)
+          const title = $('a[class=content-title]', comicContentMeta).text().trim()
+          if (debug) console.log(title)
+          comicObject['title'] = title
+          const metaList = $('.row:not([id])', comicContentMeta)
+          metaList.each((i, meta) => {
+            if (debug) console.log(meta)
+            const metaKey = $('.row-left', meta).text().trim().toLowerCase()
+            if (metaKey === 'tags') {
+              const metaTags = $('.row-right.tags a', meta).toArray().map(v => v.text.trim())
+              if (debug) console.log({ metaKey, metaTags })
+              comicObject[metaKey] = metaTags
+              return
+            }
+            const metaValue = $('.row-right', meta).text().trim()
+            if (debug) console.log({ metaKey, metaValue })
+            comicObject[metaKey] = metaValue
+          })
+          comicList.push(comicObject)
         })
       },
       methods: {
         getConfig() {
-          return window.FakkuHelper.config
+          return global.FakkuHelper.config
         },
         copyToClipboard(content) {
           const el = document.createElement('textarea')
@@ -80,7 +95,7 @@
           const list = [...this.comicList]
             .reverse()
             .filter(v => !config.comicTagExclude.some(u => v.tags.includes(u)))
-            .filter(v => !config.ignoreBook || !v.isBook)
+            .filter(v => !config.ignoreBook || !v.book)
             .map(v => [
               '[' + v.artist + ']',
               v.title,
@@ -113,4 +128,4 @@
     })
   }
 
-})()
+})
