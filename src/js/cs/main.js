@@ -14,6 +14,11 @@
     loadUI()
   }
 
+  function getComicContainers() {
+    const jq = $('.main .wrap .tab-content.active .content-comic')
+    return jq
+  }
+
   function loadUI() {
     // Navbar
     const navbarClass = 'fakku-helper-nav'
@@ -21,19 +26,18 @@
       .addClass(navbarClass)
       .load(chrome.runtime.getURL('src/html/navbar.html'))
       .hide()
-    $('.wrap').prepend(navbar).ready(() => {
-      const copyTagClass = 'fakku-helper-copy-tag'
-      // Comic button
-      $.each($('.wrap .content-comic .content-meta'), (i, v) => {
-        const btn = $('<div>')
-          .addClass(['row', copyTagClass].join(' '))
-          .attr('id', `comic-${i}`)
-          .html(`<input type="button" value="Copy Tags" @click="copyTags(${i})">`)
-        $(v).append(btn)
-      })
+    $('.wrap').prepend(navbar)
+    // Copy tags button
+    const copyTagClass = 'fakku-helper-copy-tag'
+    $('.content-meta', getComicContainers()).each((i, v) => {
+      const btn = $('<div>')
+        .addClass(['row', copyTagClass].join(' '))
+        .attr('id', `comic-${i}`)
+        .html(`<input type="button" value="Copy Tags" @click="copyTags(${i})">`)
+      $(v).append(btn)
     })
     // Show navbar
-    $(`.${navbarClass}`).fadeToggle(loadApp)
+    $(`.${navbarClass}`).fadeIn(loadApp)
   }
 
   function loadApp() {
@@ -46,18 +50,23 @@
       mounted() {
         // Debug mode
         const debug = global.FakkuHelper.debug
+        if (debug) console.log('MOUNTED')
         // Load comic list
         const comicList = this.comicList
-        const comicContainer = '.tab-content.active .content-row.content-comic'
-        $(comicContainer).each((i, comicContent) => {
+        if (debug) console.groupCollapsed('COMICS')
+        $(getComicContainers()).each((i, comicContent) => {
+          //
           const comicObject = {}
-          if (debug) console.log(`----------${i}----------`)
+          if (debug) console.group(i)
           if (debug) console.log(comicContent)
+          //
           const comicContentMeta = $('.content-meta', comicContent)[0]
           if (debug) console.log(comicContentMeta)
           const title = $('a[class=content-title]', comicContentMeta).text().trim()
           if (debug) console.log(title)
           comicObject['title'] = title
+          //
+          if (debug) console.group('META')
           const metaList = $('.row:not([id])', comicContentMeta)
           metaList.each((i, meta) => {
             if (debug) console.log(meta)
@@ -72,8 +81,12 @@
             if (debug) console.log({ metaKey, metaValue })
             comicObject[metaKey] = metaValue
           })
+          if (debug) console.groupEnd()
+          //
+          if (debug) console.groupEnd()
           comicList.push(comicObject)
         })
+        if (debug) console.groupEnd()
       },
       methods: {
         getConfig() {
