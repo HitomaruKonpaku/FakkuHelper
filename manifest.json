@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Fakku Helper",
-  "version": "2.1",
+  "version": "2.2",
   "description": "Fakku Helper",
   "icons": {
     "16": "ico/300.png",
@@ -34,6 +34,7 @@
       "js": [
         "cdn/js/jquery.min.js",
         "cdn/js/vue.min.js",
+        "cdn/js/FileSaver.min.js",
         "cdn/js/download.min.js",
         "src/js/cs/index.js",
         "src/js/cs/config.js",

@@ -88,7 +88,21 @@
           document.body.removeChild(el)
         },
         downloadContent(content) {
-          download(content, `Fakku-${Date.now()}.txt`, 'text/plain')
+          const date = new Date()
+          const fileName = [
+            'Fakku_',
+            ...[
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate(),
+              date.getHours(),
+              date.getMinutes(),
+              date.getSeconds()
+            ].map(v => String(v).padStart(2, 0).slice(-2)),
+            '.txt'
+          ].join('')
+          const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+          saveAs(blob, fileName)
         },
         generateNameAuthorTags({ includesTags }) {
           const config = this.getConfig()
@@ -106,10 +120,12 @@
           return content
         },
         copyNameAuthor() {
-          this.downloadContent(this.generateNameAuthorTags({ includesTags: false }))
+          const content = this.generateNameAuthorTags({ includesTags: false })
+          this.downloadContent(content)
         },
         copyNameAuthorTags() {
-          this.downloadContent(this.generateNameAuthorTags({ includesTags: true }))
+          const content = this.generateNameAuthorTags({ includesTags: true })
+          this.downloadContent(content)
         },
         generateTags(tags) {
           const config = this.getConfig()

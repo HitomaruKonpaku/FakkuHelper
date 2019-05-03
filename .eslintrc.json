@@ -10,6 +10,7 @@
   },
   "globals": {
     "Vue": "readonly",
+    "saveAs": "readonly",
     "download": "readonly"
   },
   "extends": [
