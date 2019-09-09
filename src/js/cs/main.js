@@ -100,18 +100,13 @@
           document.execCommand('copy')
           document.body.removeChild(el)
         },
-        downloadContent(content) {
+        downloadContent(content, fileNamePrefix) {
           const date = new Date()
           const fileName = [
             'Fakku_',
-            ...[
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate(),
-              date.getHours(),
-              date.getMinutes(),
-              date.getSeconds()
-            ].map(v => String(v).padStart(2, 0).slice(-2)),
+            fileNamePrefix,
+            '_',
+            ...[date.getHours(), date.getMinutes()].map(v => String(v).padStart(2, 0)),
             '.txt'
           ].join('')
           const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
@@ -129,16 +124,21 @@
               !includesTags ? '' : '| ' + this.generateTags(v.tags)
             ].join(' ').trim())
           const content = list.join('\n')
-          console.log(content)
+          // console.log(content)
           return content
         },
         copyNameAuthor() {
           const content = this.generateNameAuthorTags({ includesTags: false })
-          this.downloadContent(content)
+            .split('\n')
+            .map((v, i, a) => `${String(i + 1).padStart(String(a.length).length, '0')}. ${v}`)
+            .join('\n')
+          console.log(content)
+          this.downloadContent(content, 'Name')
         },
         copyNameAuthorTags() {
           const content = this.generateNameAuthorTags({ includesTags: true })
-          this.downloadContent(content)
+          console.log(content)
+          this.downloadContent(content, 'Tag')
         },
         generateTags(tags) {
           const config = this.getConfig()
