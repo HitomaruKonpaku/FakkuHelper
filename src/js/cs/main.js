@@ -106,7 +106,7 @@
             'Fakku_',
             fileNamePrefix,
             '_',
-            ...[date.getHours(), date.getMinutes()].map(v => String(v).padStart(2, 0)),
+            [date.getHours(), date.getMinutes(), date.getSeconds()].map(v => String(v).padStart(2, 0)).join(''),
             '.txt'
           ].join('')
           const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
