@@ -119,11 +119,10 @@
             .filter(v => !config.comicTagExclude.some(u => v.tags.includes(u)))
             .filter(v => !config.ignoreBook || !v.book)
             .map(v => [
-              '[' + v.artist + ']',
-              v.title,
-              !includesTags ? '' : '| ' + this.generateTags(v.tags)
-            ].join(' ').trim())
-          const content = list.join('\n')
+              `[${v.artist}] ${v.title}`,
+              includesTags ? this.generateTags(v.tags) : ''
+            ].join('\n').trim())
+          const content = list.join(includesTags ? '\n\n' : '\n')
           // console.log(content)
           return content
         },
