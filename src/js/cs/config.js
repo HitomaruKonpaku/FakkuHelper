@@ -13,7 +13,9 @@
       'doujin',
       'non-h',
       'ecchi',
-      'book'
+      'book',
+      'free',
+      'western'
     ],
     tagExclude: [
       'uncensored',
