@@ -68,9 +68,15 @@
           //
           if (debug) console.group('META')
           const metaList = $('.row:not([id])', comicContentMeta)
+          const meteKeyValues = metaList.length === 2
+            ? ['artist', 'tags']
+            : metaList.length === 3
+              ? ['artist', 'description', 'tags']
+              : []
           metaList.each((i, meta) => {
             if (debug) console.log(meta)
-            const metaKey = $('.row-left', meta).text().trim().toLowerCase()
+            let metaKey = $('.row-left', meta).text().trim().toLowerCase()
+            metaKey = metaKey || meteKeyValues[i]
             if (metaKey === 'tags') {
               const metaTags = $('.row-right.tags a', meta).toArray().map(v => v.text.trim())
               if (debug) console.log({ metaKey, metaTags })
