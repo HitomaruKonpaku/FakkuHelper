@@ -15,7 +15,8 @@
   }
 
   function getComicContainers() {
-    const jq = $('.main .wrap .tab-content.active .content-comic')
+    const jq = $('.main .wrap .tab-content.active .content-comic:not(:has(.product-price))')
+    console.log(`Found ${jq.length} elements`)
     return jq
   }
 
